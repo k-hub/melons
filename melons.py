@@ -1,8 +1,4 @@
 """This file should have our order classes in it."""
-
-class InternationalFlatFeeMixin(object):
-    pass
-
 class AbstractMelonOrder(object):
     """AbstractMelon class."""
 
@@ -22,10 +18,17 @@ class AbstractMelonOrder(object):
         """Calculate price."""
 
         base_price = 5
+
         if self.species == "Christmas melons":  # If Christmas melons is passed as an argument, then base price is 1.5 * base.
             base_price = base_price * 1.5
 
+        if self.order_type == "international":  # Need to fix lines 25-27
+            if self.qty < 10:
+                total = (1 + self.tax) * self.qty * base_price + self.flat_fee
+        
+
         total = (1 + self.tax) * self.qty * base_price
+
         
         # if self.country_code != "US":
         #     if self.qty < 10:
@@ -52,11 +55,13 @@ class DomesticMelonOrder(AbstractMelonOrder):
     #     self.order_type = "domestic"
 
 
-class InternationalMelonOrder(InternationalFlatFeeMixin, AbstractMelonOrder):
+class InternationalMelonOrder(AbstractMelonOrder):
     """An international (non-US) melon order."""
     
     tax = 0.17
     order_type = "international"
+    flat_fee = 3
+
 
     # Below code works.
 
