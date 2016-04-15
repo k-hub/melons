@@ -3,11 +3,12 @@
 class AbstractMelonOrder(object):
     """AbstractMelon class."""
 
-    def __init__(self, species, qty):
+    def __init__(self, species, qty, country_code="US"):
         """Initialize melon order attributes."""
 
         self.species = species
         self.qty = qty
+        self.country_code = country_code
         self.shipped = False
         self.tax = 0.08
 
@@ -15,8 +16,17 @@ class AbstractMelonOrder(object):
         """Calculate price."""
 
         base_price = 5
+        if self.species == "Christmas melons":  # If Christmas melons is passed as an argument, then base price is 1.5 * base.
+            base_price = base_price * 1.5
+
         total = (1 + self.tax) * self.qty * base_price
-        return total
+        
+        if self.country_code != "US":
+            if self.qty < 10:
+                flat_fee = 3
+                total = total + flat_fee
+
+        return total 
 
     def mark_shipped(self):
         """Set shipped to true."""
@@ -29,7 +39,7 @@ class DomesticMelonOrder(AbstractMelonOrder):
 
     def __init__(self, species, qty):
         """Initialize melon order attributes."""
-        super(DomesticMelonOrder, self).__init__(species, qty)
+        super(DomesticMelonOrder, self).__init__(species, qty)  # From the superclass of DomesticMelonOrder, get the method name __init__ and pull the info from species, qty
         self.order_type = "domestic"
 
 
@@ -47,6 +57,7 @@ class InternationalMelonOrder(AbstractMelonOrder):
         """Return the country code."""
 
         return self.country_code
+
 # class DomesticMelonOrder(object):
 #     """A domestic (in the US) melon order."""
 
