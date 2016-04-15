@@ -1,9 +1,7 @@
 """This file should have our order classes in it."""
 
 class AbstractMelonOrder(object):
-    """
-
-    """
+    """AbstractMelon class."""
 
     def __init__(self, species, qty):
         """Initialize melon order attributes."""
@@ -11,7 +9,6 @@ class AbstractMelonOrder(object):
         self.species = species
         self.qty = qty
         self.shipped = False
-        # self.country_code = country_code
         self.tax = 0.08
 
     def get_total(self):
@@ -30,8 +27,6 @@ class AbstractMelonOrder(object):
 class DomesticMelonOrder(AbstractMelonOrder):
     """A domestic (in the US) melon order."""
 
-
-
     def __init__(self, species, qty):
         """Initialize melon order attributes."""
         super(DomesticMelonOrder, self).__init__(species, qty)
@@ -45,6 +40,7 @@ class InternationalMelonOrder(AbstractMelonOrder):
         """Initialize melon order attributes."""
         super(InternationalMelonOrder, self).__init__(species, qty)
         self.order_type = "international"
+        self.country_code = country_code
         self.tax = 0.17
 
     def get_country_code(self):
