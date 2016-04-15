@@ -1,16 +1,22 @@
 """This file should have our order classes in it."""
 
+class InternationalFlatFeeMixin(object):
+    pass
+
 class AbstractMelonOrder(object):
     """AbstractMelon class."""
 
-    def __init__(self, species, qty, country_code="US"):
+    def __init__(self, species, qty, country_code=None):
         """Initialize melon order attributes."""
 
         self.species = species
         self.qty = qty
-        self.country_code = country_code
         self.shipped = False
-        self.tax = 0.08
+        # self.tax = None
+        # self.order_type = None
+        if country_code:
+            self.country_code = country_code
+
 
     def get_total(self):
         """Calculate price."""
@@ -21,10 +27,10 @@ class AbstractMelonOrder(object):
 
         total = (1 + self.tax) * self.qty * base_price
         
-        if self.country_code != "US":
-            if self.qty < 10:
-                flat_fee = 3
-                total = total + flat_fee
+        # if self.country_code != "US":
+        #     if self.qty < 10:
+        #         flat_fee = 3
+        #         total = total + flat_fee
 
         return total 
 
@@ -37,26 +43,37 @@ class AbstractMelonOrder(object):
 class DomesticMelonOrder(AbstractMelonOrder):
     """A domestic (in the US) melon order."""
 
-    def __init__(self, species, qty):
-        """Initialize melon order attributes."""
-        super(DomesticMelonOrder, self).__init__(species, qty)  # From the superclass of DomesticMelonOrder, get the method name __init__ and pull the info from species, qty
-        self.order_type = "domestic"
+    tax = 0.08
+    order_type = "domestic"
+
+    # def __init__(self, species, qty):
+    #     """Initialize melon order attributes."""
+    #     super(DomesticMelonOrder, self).__init__(species, qty)  # From the superclass of DomesticMelonOrder, get the method name __init__ and pull the info from species, qty
+    #     self.order_type = "domestic"
 
 
-class InternationalMelonOrder(AbstractMelonOrder):
+class InternationalMelonOrder(InternationalFlatFeeMixin, AbstractMelonOrder):
     """An international (non-US) melon order."""
+    
+    tax = 0.17
+    order_type = "international"
 
-    def __init__(self, species, qty, country_code):
-        """Initialize melon order attributes."""
-        super(InternationalMelonOrder, self).__init__(species, qty)
-        self.order_type = "international"
-        self.country_code = country_code
-        self.tax = 0.17
+    # Below code works.
 
-    def get_country_code(self):
-        """Return the country code."""
+    # def __init__(self, species, qty, country_code):
+    #     """Initialize melon order attributes."""
+    #     super(InternationalMelonOrder, self).__init__(species, qty)
+    #     self.order_type = "international"
+    #     self.country_code = country_code
+    #     self.tax = 0.17
 
-        return self.country_code
+
+    # Not sure if below code is needed.
+
+    # def get_country_code(self):
+    #     """Return the country code."""
+
+    #     return self.country_code
 
 # class DomesticMelonOrder(object):
 #     """A domestic (in the US) melon order."""
